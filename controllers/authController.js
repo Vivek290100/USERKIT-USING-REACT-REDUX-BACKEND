@@ -42,15 +42,21 @@ const signup = async (req, res) => {
   try {
     console.log('Signup request received:', req.body);
 
-    // Check if user already exists
-    let user = await User.findOne({ email });
+    let user;
+    try {
+      user = await User.findOne({ email });
+    } catch (error) {
+      console.error('Error querying user:', error.message);
+      return res.status(500).json({ message: 'Database query error' });
+    }
     if (user) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
 
     const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
 
     user = new User({
       name,
@@ -58,13 +64,12 @@ const signup = async (req, res) => {
       password: hashedPassword, 
       role: 'user', 
     });
-    console.log("userrrr", user);
 
 
     await user.save();
 
+
     const token = generateToken(user);
-    console.log("token",token);
 
     res.status(201).json({ user, token });
   } catch (error) {
