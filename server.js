@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const {connectDB} = require('./config/mongodb')
 const authRoutes = require('./routes/authRoutes')
+const adminRoutes = require('./routes/adminRoutes')
 const errorHandler = require('./middleware/errorHandler')
 require('dotenv').config();
 
@@ -18,6 +19,7 @@ app.use(express.json())
 connectDB()
 
 app.use('/api/auth',authRoutes)
+app.use('/api/admin',adminRoutes)
 
 
 app.use(errorHandler)
