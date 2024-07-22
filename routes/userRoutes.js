@@ -9,7 +9,7 @@ router.use(authenticateJWT);
 
 
 router.post('/uploadProfileImage', upload.single('profileImage'), userController.uploadProfileImage);
-
+router.delete('/deleteProfileImage', userController.deleteProfileImage);
 router.put('/updateProfile', userController.updateProfile);
 
 
