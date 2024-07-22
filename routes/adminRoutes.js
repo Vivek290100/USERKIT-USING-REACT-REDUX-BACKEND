@@ -1,10 +1,15 @@
-// backend/routes/adminRoutes.js
 const express = require('express');
-const { getUsers } = require('../controllers/adminController');
-const { authenticateJWT, authorizeAdmin } = require('../middleware/auth');
-
 const router = express.Router();
+const adminController = require('../controllers/adminController');
+const { authenticateJWT } = require('../middleware/auth');
 
-router.get('/users', authenticateJWT, authorizeAdmin, getUsers);
+router.use(authenticateJWT);
+
+router.get('/getUsers', adminController.getUsers);
+
+router.delete('/deleteUser/:email', adminController.deleteUser);
+router.put('/updateUser/:userId', adminController.updateUserByAdmin);
+    
+
 
 module.exports = router;

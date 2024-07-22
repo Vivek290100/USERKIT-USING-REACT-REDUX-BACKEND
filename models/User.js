@@ -16,6 +16,10 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  dp: {
+    type: String,
+    default : "def_prof.jpg"
+  },
   role: {
     type: String,
     enum: ['user', 'admin'],
