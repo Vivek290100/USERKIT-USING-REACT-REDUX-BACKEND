@@ -33,6 +33,53 @@ const uploadProfileImage = async (req, res) => {
   };
 
 
+
+  const getProfile = async (req, res) => {
+    console.log("reached profile from db");
+    try {
+      const user = await User.findById(req.user.id);
+      console.log("userrrrrrrr",user);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(user);
+
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+    }
+  }
+
+  const deleteProfileImage = async (req, res) => {
+    console.log("reached img-delete controller");
+    try {
+      const userId = req.user.id;
+      const user = await User.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      if (user.dp) {
+        const filePath = path.join(__dirname, '..', 'public', user.dp);
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+      }
+  
+      user.dp = null;
+      await user.save();
+  
+      res.status(200).json({ message: 'Profile image deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting profile image:', error);
+      res.status(500).json({ message: 'Server error', error: error.message });
+    }
+  };
+  
+  
+
+
   
   const updateProfile = async (req, res) => {
 
@@ -60,6 +107,5 @@ const uploadProfileImage = async (req, res) => {
   };
 
 
-  module.exports = {  uploadProfileImage, updateProfile  };
 
-  
+  module.exports = { uploadProfileImage, updateProfile, getProfile, deleteProfileImage };
