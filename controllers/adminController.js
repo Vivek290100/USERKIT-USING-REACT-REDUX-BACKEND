@@ -41,7 +41,8 @@ const deleteUser = async (req, res) => {
 };
 
 const updateUserByAdmin = async (req, res) => {
-  const { userId } = req.params; // Get the user ID from the request params
+  console.log("reach here admin edit");
+  const { userId } = req.params;
   const { name, email } = req.body;
 
   try {
