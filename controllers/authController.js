@@ -45,6 +45,9 @@ const signup = async (req, res) => {
     let user;
     try {
       user = await User.findOne({ email });
+      if (user) {
+        return res.status(400).json({ message: 'Email already exists' });
+      }
     } catch (error) {
       console.error('Error querying user:', error.message);
       return res.status(500).json({ message: 'Database query error' });
